@@ -1,0 +1,170 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{times}
+\usepackage{amsmath}
+
+\title{Report for assignment 2}
+\author{Shashwat Gupta (14IE10028)}
+
+\begin{document}
+
+\maketitle
+
+\paragraph{Fill a nxn board with one cell missing with L shaped tiles}
+\begin{enumerate}
+\item \textbf{Implementing structure}
+The structure is implemented to store two integers x and y which are the coordinates on the board
+
+\item \textbf{Implementing recursive function to split the board into 4 equal squares of size n/2}
+
+This problem can be solved using Divide and Conquer. Below is the recursive algorithm.
+Function \textbf{rec\_fill} is the recursive function doing the following things:
+\begin{description}
+ \item[$\bullet$] Find the Centre.
+ \item[$\bullet$] Call function to find the quadrant that the missing/defective cell lies in.
+ \item[$\bullet$] Call function to fill L tile appropriately.
+\end{description}
+
+\textbf{Base Condition for termination of recursion} \newline
+\emph{	if(size==2)} \newline
+\emph{	return;}
+
+\textbf{Finding centre} \newline
+\emph{	centre.x=start.x+size/2-1;}\newline
+\emph{	centre.y=start.y+size/2-1;}
+
+If the Base condition is not satisfied, the function first checks for which zone the defect is in and fills the L tile accordingly.
+It then effectively divides the board into 4 equal squares each of size $\frac{n}{2}$, and implements recursion by calling each of the 4 sub-boards recursively.
+Before calling each sub-board, it updates the start point and the defect point and passes them.
+
+Sample code for calling the four sub-boards recursivley. This code is for when the defect is in zone 1.
+
+\emph{	startCopyy.x=start.x;} \newline
+\emph{	startCopyy.y=start.y;} \newline
+\emph{	defectCopyy.x=defect.x;} \newline
+\emph{	defectCopyy.y=defect.y;} \newline
+\emph{	recfill(startCopyy,size/2,defectCopyy);} \newline
+\emph{	startCopyy.x=start.x+size/2;} \newline
+\emph{	startCopyy.y=start.y;} \newline
+\emph{	defectCopyy.x=start.x+size/2;} \newline
+\emph{	defectCopyy.y=start.y+size/2-1;} \newline
+\emph{	recfill(startCopyy,size/2,defectCopyy);} \newline
+\emph{	startCopyy.x=start.x+size/2;} \newline
+\emph{	startCopyy.y=start.y+size/2;} \newline
+\emph{	defectCopyy.x=start.x+size/2;} \newline
+\emph{	defectCopyy.y=start.y+size/2;} \newline
+\emph{	recfill(startCopyy,size/2,defectCopyy);} \newline
+\emph{	startCopyy.x=start.x;} \newline
+\emph{	startCopyy.y=start.y+size/2;} \newline
+\emph{	defectCopyy.x=start.x+size/2-1;} \newline
+\emph{	defectCopyy.y=start.y+size/2;} \newline
+\emph{	recfill(startCopyy,size/2,defectCopyy);}
+
+\item \textbf{Function that checks for quadrant} \newline
+\emph{	int checkdefectzone(point centre, point defect)} \newline
+\emph{		if(defect.x more than centre.x)} \newline
+\emph{			if(defect.y more than centre.y)} \newline
+\emph{				return 3;} \newline
+\emph{			else} \newline
+\emph{				return 2;} \newline
+\emph{		else} \newline
+\emph{			if(defect.y more than centre.y)} \newline
+\emph{				return 4;} \newline
+\emph{			else} \newline
+\emph{				return 1;}
+
+\item \textbf{Function that fills the L tile appropriately} \newline
+\emph{	void fill4operation(point a, int z)} \newline
+\emph{		if(z==1)} \newline
+\emph{			arr[a.x+1][a.y+1]=printer;} \newline
+\emph{			arr[a.x][a.y+1]=printer;} \newline
+\emph{			arr[a.x+1][a.y]=printer;} \newline
+\emph{		else if(z==2)} \newline
+\emph{			arr[a.x][a.y]=printer;} \newline
+\emph{			arr[a.x][a.y+1]=printer;} \newline
+\emph{			arr[a.x+1][a.y+1]=printer;} \newline
+\emph{		else if(z==3)} \newline
+\emph{			arr[a.x][a.y]=printer;} \newline
+\emph{			arr[a.x+1][a.y]=printer;} \newline
+\emph{			arr[a.x][a.y+1]=printer;} \newline
+\emph{		else} \newline
+\emph{			arr[a.x][a.y]=printer;} \newline
+\emph{			arr[a.x+1][a.y]=printer;} \newline
+\emph{			arr[a.x+1][a.y+1]=printer;} \newline
+\emph{		printer++;}
+
+
+\item \textbf{Printing the Board} \newline
+\emph{	void printarray(int size)} \newline
+\emph{		printf("printing board: ");} \newline
+\emph{		int i,j;} \newline
+\emph{		for (i = 0; i less than size; ++i)} \newline
+\emph{			for (j = 0; j less than size; ++j)} \newline
+\emph{			printf("d\t",arr[i][j]);} \newline
+\emph{			printf(" ");}
+
+While printing the board, we observe a series of number in the board, where we observe all integers three times except the integer -1. The -1 represents the original missing cell and all the other integer triplets represent the L tile.
+
+\item \textbf{Some Notes}
+The baord has been assumed to be a 2-D array and its has been defined globally. Its size is user defined with an upper limit m which is macro defined and can be changed. A printer variable is also globally defined to store the running triplet number.
+
+\item \textbf{Time Complexity Calculation}
+For each value of size, the board checks if the size is 2X2 and if it isn't then it recursively calls the 4 sub-boards of size $\frac{n}{2}$
+
+\begin{displaymath}   T(n) = \left\{
+     \begin{array}{lr}
+       a & : n = 1\\
+       4T(\frac{n}{2}) + c & : n > 1
+     \end{array}
+   \right.
+\end{displaymath}
+
+Solving this equation by recursive method yields T(n) $\in O(n^2)$.
+ 
+\end{enumerate}
+
+\paragraph{Finding the closest pair of points}
+\begin{enumerate}
+\item \textbf{Implementing structure}
+The structure is implemented to store two integers x and y which are the coordinates on the board
+
+ \item \textbf{Implementing function to find the distance between 2 points}
+ \newline
+\emph{	float givedistance(point a, point b)} \newline
+\emph{  return sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));}
+
+\item \textbf{Implementing function to randomly populate the set of coordinate points with whole numbers less than 100}
+\newline \emph{ void fillcoordinates() }
+ \newline \emph{   srand(time(NULL)); }
+ \newline \emph{   int i; }
+ \newline \emph{   printf("Enter number of points : "); }
+ \newline \emph{   scanf("d",n); }
+ \newline \emph{   for (i = 0; i < n; ++i) }
+ \newline \emph{       a[i].x=rand() mod 100; }
+ \newline \emph{       a[i].y=rand() mod 100; }
+
+ \item \textbf{Implementing function to print}
+\newline \emph{ void printarray() }
+ \newline \emph{   int i; }
+ \newline \emph{   for (i = 0; i < n; ++i) }
+ \newline \emph{       printf("(d,d) ",a[i].x,a[i].y); }
+ \newline \emph{   printf(" "); }
+
+\item \textbf{Implementing function to return least distance}
+\newline \emph{float bruteforce()}
+ \newline \emph{   int i,j;}
+\newline \emph{    float min=givedistance(a[0],a[1]);}
+\newline \emph{    for(i=0;i<n-1;i++)}
+ \newline \emph{       for(j=i+1;j<n;j++)}
+  \newline \emph{          if(givedistance(a[i],a[j])<min)}
+ \newline \emph{               min=givedistance(a[i],a[j]);}
+ \newline \emph{   return min; }
+
+\item \textbf{Time Complexity Calculation}
+For each value the board checks the distance with all the other values and finds the minimum
+
+Solving this equation by recursive method yields T(n) $\in O(n^2)$.
+
+\end{enumerate}
+
+\end{document}
