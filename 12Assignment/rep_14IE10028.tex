@@ -1,0 +1,161 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{color}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\begin{document}
+
+
+%Code listing style named "mystyle"
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},   commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,            
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=mystyle}
+
+\centerline{\sc \large REPORT FOR ASSIGNMENT 12}
+\vspace{1.5pc}
+\centerline{\sc Shashwat Gupta | 14IE10028 }
+\centerline{\sc 12 April 2016 }
+%\centerline{\it (Read the .tex file along with this or it won't 
+%            make much sense)}
+\vspace{4pc}
+
+% \textbf{Selection between lists}
+
+\textbf{Indirect sorting} \\
+
+Searching for unique element : $O(n^2)$
+
+\begin{lstlisting}[language=C, caption=]
+int is_unique(int ar[], const int n)
+{
+    int i, j;
+    for(i=0; i<n; ++i)
+    {
+        for (j = i + 1; j<n; ++j)
+        {
+            if (ar[i] == ar[j])
+                return ar[i];
+        }
+    }
+    return -INF;
+}
+\end{lstlisting}
+
+Creating graph out of comparisions : $O(n^2)$
+
+\begin{lstlisting}[language=C, caption=]
+int srt(int ar[], const int n)
+{
+    int i, j;
+    int ret = -INF;
+    for(i=0; i<n; ++i)
+    {
+        for (j = i + 1; j<n; ++j)
+        {
+            if (ar[i] == ar[j])
+                ret = ar[i];
+            if (ar[i] > ar[j])
+                addEdge(ar[i], ar[j]);
+            else
+                addEdge(ar[j], ar[i]);
+        }
+        valid[ar[i]] = 1;
+    }
+    return ret;
+}
+\end{lstlisting}
+
+Topological Sort \\
+A topological sort or topological ordering of a directed graph is a linear ordering of its vertices such that for every directed edge uv from vertex u to vertex v, u comes before v in the ordering. 
+
+Time = O(V + E)
+
+\begin{lstlisting}[language=C, caption=]
+void topsort()
+{
+    int i;
+    for(i=0; i<100; ++i)
+    {
+        if (valid[i])
+        _visit(i);
+    }
+}
+\end{lstlisting}
+
+Post numbering : \\
+\begin{lstlisting}[language=C, caption=]
+void _visit(int i)
+{
+    if (vis[i] == temp)
+        return;
+    if (vis[i] == 1)
+        return;
+    vis[i] = temp;
+    ++num;
+    int j;
+    for(j=0; j<100; ++j)
+    {
+        if (gph.ar[i][j] == 1)
+            _visit(j);
+    }
+    postnumb[i] = num;
+    postnumbed[nnn++] = i;
+    printf("%d ", i);
+    vis[i] = 1;
+}
+\end{lstlisting}
+
+Command line args :
+\begin{lstlisting}[language=C, caption=]
+  if (argc == 1)
+    {
+        printf("Invalid num args\nCommand line input was expected\nRunning with default number\n");
+        putchar('\n');
+        int i;
+        for(i=0; i<n; ++i)
+            printf("%d ", arr[i]);
+        putchar('\n');
+    }
+    else if (argc == 2)
+    {
+        n = atoi(argv[1]);
+        printf("In : ");
+        gen(arr, n);
+        putchar('\n');;
+    }
+    else
+    {
+        n = atoi(argv[1]);
+        int i;
+        printf("In : ");
+        for(i=0; i<n; ++i)
+            printf("%d ", arr[i] = atoi(argv[i + 2]));
+        putchar('\n');;
+    }
+\end{lstlisting}
+
+\end{document}
+
